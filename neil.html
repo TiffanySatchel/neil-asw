@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Neil | Authority Systems Weekly</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --navy: #0A1628;
+      --navy-deep: #071020;
+      --navy-mid: #0f1f3d;
+      --navy-light: #1a2f52;
+      --gold: #C9A84C;
+      --gold-light: #dfc070;
+      --cream: #F5F0E8;
+      --white: #ffffff;
+      --muted: #8899bb;
+      --border: #1e3050;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--navy);
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-weight: 400;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 40px 16px 60px;
+    }
+
+    .neil-wrapper {
+      width: 100%;
+      max-width: 580px;
+    }
+
+    /* Header */
+    .neil-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .neil-eyebrow {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .neil-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .neil-subtitle {
+      font-size: 12px;
+      font-weight: 300;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .neil-divider {
+      width: 48px;
+      height: 1px;
+      background: var(--gold);
+      margin: 16px auto 0;
+      opacity: 0.5;
+    }
+
+    /* Sound prompt screen */
+    .neil-sound-screen {
+      background: var(--navy-deep);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 48px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .neil-sound-icon {
+      font-size: 36px;
+      margin-bottom: 20px;
+      display: block;
+    }
+
+    .neil-sound-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: 0.04em;
+    }
+
+    .neil-sound-text {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 28px;
+      letter-spacing: 0.04em;
+    }
+
+    /* Chat window */
+    .neil-chat {
+      background: var(--navy-deep);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 28px 24px;
+      min-height: 260px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .neil-bubble {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .neil-bubble-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      min-width: 36px;
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .neil-bubble-label.user-label {
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .neil-bubble.user-bubble {
+      flex-direction: row-reverse;
+    }
+
+    .neil-bubble-text {
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--cream);
+      flex: 1;
+    }
+
+    .neil-bubble.user-bubble .neil-bubble-text {
+      text-align: right;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Input area */
+    .neil-input-area {
+      margin-bottom: 16px;
+    }
+
+    .neil-input {
+      width: 100%;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .neil-input::placeholder { color: var(--muted); font-weight: 300; }
+    .neil-input:focus { border-color: var(--gold); }
+
+    .neil-textarea {
+      width: 100%;
+      background: var(--navy-mid);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--cream);
+      font-family: 'Jost', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: vertical;
+      min-height: 100px;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .neil-textarea::placeholder { color: var(--muted); font-weight: 300; }
+    .neil-textarea:focus { border-color: var(--gold); }
+
+    /* Buttons */
+    .neil-btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .neil-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 13px 16px;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .neil-btn:hover { opacity: 0.85; }
+    .neil-btn:focus { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    .neil-btn-gold { background: var(--gold); color: var(--navy-deep); }
+
+    .neil-btn-outline {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid var(--border);
+    }
+
+    .neil-btn-outline:hover { border-color: var(--gold); color: var(--gold); opacity: 1; }
+
+    .neil-btn-full {
+      width: 100%;
+      display: block;
+      padding: 14px;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      background: var(--gold);
+      color: var(--navy-deep);
+      border: none;
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: opacity 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .neil-btn-full:hover { opacity: 0.85; }
+    .neil-btn-full:focus { outline: 2px solid var(--cream); outline-offset: 2px; }
+
+    .neil-btn-full-outline {
+      width: 100%;
+      display: block;
+      padding: 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      margin-bottom: 10px;
+      transition: color 0.2s, border-color 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .neil-btn-full-outline:hover { color: var(--cream); border-color: var(--gold); }
+
+    /* Status */
+    .neil-status {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      letter-spacing: 0.06em;
+      min-height: 18px;
+    }
+
+    .neil-status.success { color: var(--gold); }
+    .neil-status.error   { color: #e07070; }
+
+    /* Footer */
+    .neil-footer {
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .neil-footer p {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--border);
+    }
+
+    /* Link */
+    .neil-link {
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .neil-link:hover { border-color: var(--gold); }
+
+    /* Typing indicator */
+    .neil-typing {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      padding: 4px 0;
+    }
+    .neil-typing span {
+      width: 6px;
+      height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      opacity: 0.4;
+      animation: blink 1.2s infinite;
+    }
+    .neil-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .neil-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink {
+      0%, 80%, 100% { opacity: 0.2; }
+      40% { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="neil-wrapper">
+
+  <div class="neil-header">
+    <p class="neil-eyebrow">Authority Systems Weekly</p>
+    <h1 class="neil-title">Meet Neil</h1>
+    <p class="neil-subtitle">Your guide to getting started</p>
+    <div class="neil-divider"></div>
+  </div>
+
+  <!-- SOUND PROMPT SCREEN -->
+  <div class="neil-sound-screen" id="neil-sound-screen">
+    <span class="neil-sound-icon">🔊</span>
+    <p class="neil-sound-title">Turn Your Sound On</p>
+    <p class="neil-sound-text">Neil will guide you through this experience with audio.<br>For the best experience, please turn your sound on before continuing.</p>
+    <button class="neil-btn-full" onclick="beginExperience()" aria-label="Turn sound on and begin">I'm Ready &mdash; Begin</button>
+  </div>
+
+  <!-- CHAT WINDOW -->
+  <div class="neil-chat" id="neil-chat"></div>
+
+  <!-- INPUT UI -->
+  <div id="neil-ui" style="display:none;"></div>
+
+  <div class="neil-status" id="neil-status"></div>
+
+  <div class="neil-footer">
+    <p>Authority Systems Weekly &nbsp;&bull;&nbsp; Tiffany Satchel Press</p>
+  </div>
+
+</div>
+
+<script>
+  // ── CONFIG ────────────────────────────────────────────────────────────────
+  const SHEET_URL = "https://script.google.com/macros/s/AKfycbzCMWnhIiCjjCuTUGk8n2QIUT_Mz3QgjCPAxHe0famAmu1p6bmV9ZobF5nAkwi_W63IOg/exec";
+  const NIA_URL   = "https://snazzy-nasturtium-69b36a.netlify.app";
+  const X_URL     = "https://x.com/TiffanySatchel/highlights";
+
+  // ── AUDIO MAP ─────────────────────────────────────────────────────────────
+  const AUDIO = {
+    1:  "./Neil_App_Chapter_1.mp3",
+    2:  "./Neil_App_Chapter_2.mp3",
+    3:  "./Neil_App_Chapter_3.mp3",
+    4:  "./Neil_App_Chapter_4.mp3",
+    5:  "./Neil_App_Chapter_5.mp3",
+    6:  "./Neil_App_Chapter_6.mp3",
+    7:  "./Neil_App_Chapter_7.mp3",
+    8:  "./Neil_App_Chapter_8.mp3",
+    9:  "./Neil_App_Chapter_9.mp3",
+    10: "./Neil_App_Chapter_10.mp3",
+    11: "./Neil_App_Chapter_11.mp3"
+  };
+
+  // ── STATE ─────────────────────────────────────────────────────────────────
+  let state = { step: "welcome", name: "", email: "", message: "" };
+
+  // ── DOM REFS ──────────────────────────────────────────────────────────────
+  const soundScreen = document.getElementById("neil-sound-screen");
+  const chatEl      = document.getElementById("neil-chat");
+  const uiEl        = document.getElementById("neil-ui");
+  const statusEl    = document.getElementById("neil-status");
+
+  // ── AUDIO ─────────────────────────────────────────────────────────────────
+  let currentAudio = null;
+
+  function playChapter(num) {
+    return new Promise(resolve => {
+      if (currentAudio) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+      const audio = new Audio(AUDIO[num]);
+      currentAudio = audio;
+      audio.play().catch(() => {});
+      audio.onended = () => resolve();
+      audio.onerror = () => resolve();
+    });
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────────────
+  function clearStatus() { statusEl.textContent = ""; statusEl.className = "neil-status"; }
+  function setStatus(msg, type) { statusEl.textContent = msg; statusEl.className = "neil-status " + (type || ""); }
+
+  function showUI() { uiEl.style.display = "block"; }
+  function hideUI() { uiEl.style.display = "none"; }
+
+  function addMessage(who, text) {
+    const bubble = document.createElement("div");
+    bubble.className = "neil-bubble" + (who === "user" ? " user-bubble" : "");
+
+    const label = document.createElement("div");
+    label.className = "neil-bubble-label" + (who === "user" ? " user-label" : "");
+    label.textContent = who === "user" ? "You" : "Neil";
+
+    const msg = document.createElement("div");
+    msg.className = "neil-bubble-text";
+    msg.innerHTML = text;
+
+    bubble.appendChild(label);
+    bubble.appendChild(msg);
+    chatEl.appendChild(bubble);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  function addTyping() {
+    const bubble = document.createElement("div");
+    bubble.className = "neil-bubble";
+    bubble.id = "neil-typing-bubble";
+
+    const label = document.createElement("div");
+    label.className = "neil-bubble-label";
+    label.textContent = "Neil";
+
+    const typing = document.createElement("div");
+    typing.className = "neil-bubble-text";
+    typing.innerHTML = '<div class="neil-typing"><span></span><span></span><span></span></div>';
+
+    bubble.appendChild(label);
+    bubble.appendChild(typing);
+    chatEl.appendChild(bubble);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById("neil-typing-bubble");
+    if (t) t.remove();
+  }
+
+  // neilSays: shows typing, then message, then plays audio chapter and waits for it to finish
+  function neilSays(text, chapterNum, preDelay) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        addTyping();
+        chatEl.scrollTop = chatEl.scrollHeight;
+        setTimeout(async () => {
+          removeTyping();
+          addMessage("neil", text);
+          chatEl.scrollTop = chatEl.scrollHeight;
+          if (chapterNum) {
+            await playChapter(chapterNum);
+          }
+          resolve();
+        }, 700);
+      }, preDelay || 300);
+    });
+  }
+
+  function renderUI(html) {
+    uiEl.innerHTML = html;
+    showUI();
+  }
+
+  function clearUI() {
+    uiEl.innerHTML = "";
+    hideUI();
+  }
+
+  // ── GOOGLE SHEETS ─────────────────────────────────────────────────────────
+  async function saveToSheet() {
+    try {
+      const params = new URLSearchParams({
+        name:    state.name,
+        email:   state.email,
+        message: state.message || "(No message left)"
+      });
+      await fetch(SHEET_URL + "?" + params.toString(), { method: "GET", mode: "no-cors" });
+    } catch (e) {
+      console.warn("Sheet save error:", e);
+    }
+  }
+
+  // ── FLOW ──────────────────────────────────────────────────────────────────
+
+  async function beginExperience() {
+    soundScreen.style.display = "none";
+    chatEl.style.display = "block";
+
+    // Chapters 1, 2, 3 play automatically in sequence
+    await neilSays(
+      "Hi there. I'm Neil, your guide for Authority Systems Weekly.",
+      1
+    );
+    await neilSays(
+      "I'm here to get you set up with your free copy of <em>Eleven Ways to Use AI to Strengthen Your Career Positioning</em> and make sure you know exactly what is happening inside ASW.",
+      2
+    );
+    await neilSays(
+      "Let's start with your first name. What should I call you?",
+      3
+    );
+    showNameInput();
+  }
+
+  function showNameInput() {
+    state.step = "name";
+    renderUI(`
+      <div class="neil-input-area">
+        <input class="neil-input" id="neil-name-input" type="text" placeholder="Your first name" autocomplete="given-name" aria-label="Your first name" />
+        <button class="neil-btn-full" onclick="submitName()">Continue</button>
+      </div>
+    `);
+    document.getElementById("neil-name-input").focus();
+    document.getElementById("neil-name-input").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") submitName();
+    });
+  }
+
+  async function submitName() {
+    const val = document.getElementById("neil-name-input").value.trim();
+    if (!val) { setStatus("Please enter your first name.", "error"); return; }
+    clearStatus();
+    state.name = val;
+    addMessage("user", val);
+    clearUI();
+    // Chapter 4: "Great to meet you! What email address should I send your guide to?"
+    await neilSays(
+      "Great to meet you, " + val + ". What email address should I send your guide to?",
+      4
+    );
+    showEmailInput();
+  }
+
+  function showEmailInput() {
+    state.step = "email";
+    renderUI(`
+      <div class="neil-input-area">
+        <input class="neil-input" id="neil-email-input" type="email" placeholder="Your email address" autocomplete="email" aria-label="Your email address" />
+        <button class="neil-btn-full" onclick="submitEmail()">Continue</button>
+      </div>
+    `);
+    document.getElementById("neil-email-input").focus();
+    document.getElementById("neil-email-input").addEventListener("keydown", function(e) {
+      if (e.key === "Enter") submitEmail();
+    });
+  }
+
+  async function submitEmail() {
+    const val = document.getElementById("neil-email-input").value.trim();
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!val || !emailRegex.test(val)) { setStatus("Please enter a valid email address.", "error"); return; }
+    clearStatus();
+    state.email = val;
+    addMessage("user", val);
+    clearUI();
+    // Chapter 5: "Perfect. Your guide is on its way. Before I let you go, I want to ask you something."
+    await neilSays(
+      "Perfect. Your guide is on its way to " + val + ". Before I let you go, I want to ask you something.",
+      5
+    );
+    // Chapter 6: "Would you like to leave a personal message for Tiffany? I'll write it down word for word."
+    await neilSays(
+      "Would you like to leave a personal message for Tiffany? I'll write it down word for word.",
+      6
+    );
+    showMessageChoice();
+  }
+
+  function showMessageChoice() {
+    state.step = "message-choice";
+    renderUI(`
+      <div class="neil-btn-row">
+        <button class="neil-btn neil-btn-gold" onclick="showMessageInput()">Yes, I'd like to leave a message</button>
+        <button class="neil-btn neil-btn-outline" onclick="skipMessage()">No thank you</button>
+      </div>
+    `);
+  }
+
+  function showMessageInput() {
+    state.step = "message";
+    addMessage("user", "Yes, I'd like to leave a message");
+    renderUI(`
+      <div class="neil-input-area">
+        <textarea class="neil-textarea" id="neil-message-input" placeholder="Your message for Tiffany..." aria-label="Your message for Tiffany"></textarea>
+        <button class="neil-btn-full" onclick="submitMessage()">Send My Message</button>
+      </div>
+    `);
+    document.getElementById("neil-message-input").focus();
+  }
+
+  async function submitMessage() {
+    const val = document.getElementById("neil-message-input").value.trim();
+    if (!val) { setStatus("Please write your message before sending.", "error"); return; }
+    clearStatus();
+    state.message = val;
+    addMessage("user", "\u201c" + val + "\u201d");
+    clearUI();
+    // Chapter 7: "I have that written down exactly as you said it. Tiffany will see it."
+    await neilSays(
+      "I have that written down exactly as you said it. Tiffany will see it.",
+      7
+    );
+    await saveToSheet();
+    await showClosing();
+  }
+
+  async function skipMessage() {
+    addMessage("user", "No thank you");
+    state.message = "";
+    clearUI();
+    await saveToSheet();
+    await showClosing();
+  }
+
+  async function showClosing() {
+    // Chapter 8: Sunday live session info
+    await neilSays(
+      "Before you go, " + state.name + ", here is something worth knowing. Every Sunday at 7:00 p.m. Eastern, Tiffany hosts a live discussion on X Spaces called <em>Practical AI for Everyday People</em>. It is beginner-friendly, practical, and free. You can find the current session link in the highlights section at <a class='neil-link' href='" + X_URL + "' target='_blank' rel='noopener noreferrer'>x.com/TiffanySatchel</a>.",
+      8
+    );
+    // Chapter 9: Nia transfer offer
+    await neilSays(
+      "One more thing. Would you like for me to transfer you to Nia to schedule a 15 minute call with Tiffany soon?",
+      9
+    );
+    showNiaChoice();
+  }
+
+  function showNiaChoice() {
+    state.step = "nia-choice";
+    renderUI(`
+      <div class="neil-btn-row">
+        <button class="neil-btn neil-btn-gold" onclick="transferToNia()">Yes, connect me with Nia</button>
+        <button class="neil-btn neil-btn-outline" onclick="finalClose()">No thank you</button>
+      </div>
+    `);
+  }
+
+  async function transferToNia() {
+    addMessage("user", "Yes, connect me with Nia");
+    clearUI();
+    // Chapter 10: "Perfect. I'm sending you over to Nia now. She will take it from here."
+    await neilSays(
+      "Perfect. I'm sending you over to Nia now. She will take it from here.",
+      10
+    );
+    renderUI(`
+      <button class="neil-btn-full" onclick="window.open('${NIA_URL}', '_blank', 'noopener,noreferrer')">Open Nia Now</button>
+      <button class="neil-btn-full-outline" onclick="finalClose()">I'll do it another time</button>
+    `);
+  }
+
+  async function finalClose() {
+    addMessage("user", "No thank you");
+    clearUI();
+    // Chapter 11: "No problem. Thank you." -- used for both no paths
+    await neilSays(
+      "No problem. You are all set, " + state.name + ". Check your inbox for your guide. We will see you Sunday.",
+      11
+    );
+    uiEl.innerHTML = `<p style="text-align:center; font-size:12px; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; margin-top:8px;">Become More Valuable, Not More Vulnerable</p>`;
+    showUI();
+  }
+
+</script>
+
+</body>
+</html>
