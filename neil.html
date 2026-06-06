@@ -395,9 +395,12 @@
 
 <script>
   // ── CONFIG ────────────────────────────────────────────────────────────────
-  const SHEET_URL = "https://script.google.com/macros/s/AKfycbzCMWnhIiCjjCuTUGk8n2QIUT_Mz3QgjCPAxHe0famAmu1p6bmV9ZobF5nAkwi_W63IOg/exec";
-  const NIA_URL   = "https://snazzy-nasturtium-69b36a.netlify.app";
-  const X_URL     = "https://x.com/TiffanySatchel/highlights";
+  const SHEET_URL    = "https://script.google.com/macros/s/AKfycbzCMWnhIiCjjCuTUGk8n2QIUT_Mz3QgjCPAxHe0famAmu1p6bmV9ZobF5nAkwi_W63IOg/exec";
+  const NIA_URL      = "https://snazzy-nasturtium-69b36a.netlify.app";
+  const X_URL        = "https://x.com/TiffanySatchel/highlights";
+  const DELIVERY_URL = "https://zesty-haupia-fc0b0f.netlify.app/guide-delivery.html";
+  const ML_TOKEN     = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiNzU5MjM2MGUzZDg0MDk1Y2I3Yzg1ZWQ3MzY5MzEyODQ1MTRiOWNlZWQ4ZGQ5NTI2MjBlYmM0OTU2MWVjZTM5M2Q2OGEyOTQyZmI0N2U0OWIiLCJpYXQiOjE3ODA3MDYwODQuNTAyNTY1LCJuYmYiOjE3ODA3MDYwODQuNTAyNTY3LCJleHAiOjQ5MzYzNzk2ODQuNDk3ODEzLCJzdWIiOiIyMDk2OTIwIiwic2NvcGVzIjpbXX0.FUlsqdT2jiYVzCUm4-nW9vgMF6NFN-9b1F9h3PJ9hvsGSX2eZJbCjIfLizRNuwwmf12jFtPy1UeK0gO0mIxGmtshxujpL7m-Ewsvs07kEx1w8HJp3wx72QREQuV2rdxSVk0inuVu1ttWibLuUuIZFEPuflocKDZ_UP5wQx6bjYBChOWo0GR6w7vPpJqFtzBYy4IdpO1lSEm8Epp0yDg-IuphfaqJ9-wTsoAuZ3EnN2taQxy1ZFM56jz50E3eaLlSbLZvkSZM2rj7c59IbKG2_t-Uot9yab0JP5p1fk-UVJggjW2tekFXiMdDiitDR7JXzl2KKCmP0bLhFUtvTVlwI6orBWogiUnOrmQ9mzgv7o15SxS4ITSowgfwRUTkocntuB53ph5O5byxq1TveKJiTyuNBPSC-sitSOLbTikaCioWrY33xtFeaxUs7rZU1861rUrPc8DaV-A24PoSvoszSjrpd_yiQZCHyXY4Y1cH6d8DCNoKd9WL0kVIgrCcl85_aLfenp3l47GW5EJvi8A_23yN1coYP2G0lfpagkoIKDenDiigPr3VGcTuUqRKhoVRiinICX2jGWYtBycpnE_LNGCHmS1aueY3q1ZaQpBmg2jzMxDAkCRaTAQRss3k2WzzwbPbfwNkFOf0rTbqA3-2n3wdTrhL1g5KRWV2IQNybIU";
+  const ML_GROUP_ID  = "189281698433730449";
 
   // ── AUDIO MAP ─────────────────────────────────────────────────────────────
   const AUDIO = {
@@ -532,6 +535,37 @@
     }
   }
 
+  // ── MAILERLITE ────────────────────────────────────────────────────────────
+  async function saveToMailerLite() {
+    try {
+      await fetch("https://connect.mailerlite.com/api/subscribers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + ML_TOKEN
+        },
+        body: JSON.stringify({
+          email:  state.email,
+          fields: { name: state.name },
+          groups: [ML_GROUP_ID]
+        })
+      });
+    } catch (e) {
+      console.warn("MailerLite save error:", e);
+    }
+  }
+
+  // ── DELIVERY PAGE ─────────────────────────────────────────────────────────
+  function openDeliveryPage() {
+    window.open(DELIVERY_URL, "_blank", "noopener,noreferrer");
+  }
+
+  // ── SAVE ALL + DELIVER ────────────────────────────────────────────────────
+  async function saveAndDeliver() {
+    await Promise.all([saveToSheet(), saveToMailerLite()]);
+    openDeliveryPage();
+  }
+
   // ── FLOW ──────────────────────────────────────────────────────────────────
 
   async function beginExperience() {
@@ -652,7 +686,7 @@
       "I have that written down exactly as you said it. Tiffany will see it.",
       7
     );
-    await saveToSheet();
+    await saveAndDeliver();
     await showClosing();
   }
 
@@ -660,7 +694,7 @@
     addMessage("user", "No thank you");
     state.message = "";
     clearUI();
-    await saveToSheet();
+    await saveAndDeliver();
     await showClosing();
   }
 
