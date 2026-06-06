@@ -639,14 +639,14 @@
     state.email = val;
     addMessage("user", val);
     clearUI();
-    // Chapter 5: "Perfect. Your guide is on its way. Before I let you go, I want to ask you something."
+    // Chapter 5: "Perfect. Your guide is on its way."
     await neilSays(
-      "Perfect. Your guide is on its way to " + val + ". Before I let you go, I want to ask you something.",
+      "Perfect. Your guide is on its way to " + val + ". If it did not open automatically, <a class=\'neil-link\' href=\'" + DELIVERY_URL + "\' target=\'_blank\' rel=\'noopener noreferrer\'>click here to access your guide</a>.",
       5
     );
     // Chapter 6: "Would you like to leave a personal message for Tiffany? I'll write it down word for word."
     await neilSays(
-      "Would you like to leave a personal message for Tiffany? I'll write it down word for word.",
+      "Would you like to leave a personal message for Tiffany? I\u2019ll write it down word for word.",
       6
     );
     showMessageChoice();
